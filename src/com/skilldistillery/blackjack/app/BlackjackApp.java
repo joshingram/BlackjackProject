@@ -45,10 +45,18 @@ public class BlackjackApp {
 		int nOD = dealer.dealersDeck.checkNumOfDecks();
 		System.out.println("We're playing with an " + nOD + " deck shoe. ");
 		System.out.println("The dealer must hit on 16 and stand on 17.");
+		System.out.println("Administrative notes are shown with \"** notation **\"");
 		System.out.println();
-		System.out.print("Please enter your name: ");
+		System.out.println("Please enter your NAME or enter \"showcards\" to print the entire deck");
+		System.out.println("There are " + nOD + " decks of cards, think twice about printing them: ");
 		playerName = kb.next();
+		kb.nextLine();
+		if (playerName.equalsIgnoreCase("showcards")) {
+			dealer.dealersDeck.showAllCards();
+			welcomeScreen();
+		}else {
 		player.setName(playerName);
+		}
 	}
 	//call dealer methods to deal the first four cards in alternating order 
 	//place cards into respective hands
@@ -119,12 +127,12 @@ public class BlackjackApp {
 		System.out.println("** Dealer's hand value is " + dealerHV + " **");
 		if (dealerHV == 21) {
 			if (dealerHV == 21 && playerBJ) {
-				System.out.println("Dealer has also Black Jack!! It's a push");
+				System.out.println("Dealer has also Black Jack!! It's a push.");
 			} else {
-				System.out.println("Dealer has Black Jack!! You lose");
+				System.out.println("Dealer has Black Jack!! You lose.");
 			}
 		} else if (dealerHV == playerHV && dealerHV > 16) {
-			System.out.println("It's a push");
+			System.out.println("It's a push.");
 		} else if (dealerHV > playerHV  && dealerHV > 16) {
 			System.out.println("Dealer wins.");
 		} else if (dealerHV <= 16) {
@@ -159,7 +167,6 @@ public class BlackjackApp {
 			System.out.println("Would you like to play again? Yes or No:");
 			String againChoice = kb.next();
 			if (againChoice.equalsIgnoreCase("yes") || againChoice.equalsIgnoreCase("y")) {
-				//kb.nextLine();
 				keepPlaying();
 			}
 			else if (againChoice.equalsIgnoreCase("NO") || againChoice.equalsIgnoreCase("n")) {
@@ -170,5 +177,4 @@ public class BlackjackApp {
 			}
 		}
 	}
-
 }
