@@ -24,6 +24,12 @@ public class Dealer extends Player{
 		int dealerDeckSize = dealersDeck.checkDeckSize();
 		return dealerDeckSize;
 	}
+	
+	public void dealerNewDeck() {
+		dealersDeck= new Deck();
+		dealerShuffle();
+		System.out.println("According to house rules, new shoe in use");
+	}
 
 }
  

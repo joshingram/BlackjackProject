@@ -22,7 +22,8 @@ public class BlackjackApp {
 		dealer.dealerShuffle();
 		keepPlaying();
 	}
-	public void keepPlaying() {	
+
+	public void keepPlaying() {
 		while (true) {
 			clearHands();
 			initialDeal();
@@ -43,9 +44,12 @@ public class BlackjackApp {
 		System.out.println("Welcome to the Black Jack App");
 		System.out.println();
 		int nOD = dealer.dealersDeck.checkNumOfDecks();
-		System.out.println("We're playing with an " + nOD + " deck shoe. ");
-		System.out.println("The dealer must hit on 16 and stand on 17.");
-		System.out.println("Administrative notes are shown with \"** notation **\"");
+		int minShoe = dealer.dealersDeck.checkMinDeck();
+		System.out.println("** House Rules **");
+		System.out.println("-We're playing with an " + nOD + " deck shoe. ");
+		System.out.println("-A new shoe will be used when " + minShoe + " cards remain in the shoe"); 
+		System.out.println("-The dealer must hit on 16 (and below) and stand on 17 (and above).");
+		System.out.println("-Administrative notes are shown with \"** notation **\"");
 		System.out.println();
 		System.out.println("Please enter your NAME or enter \"showcards\" to print the entire deck");
 		System.out.println("There are " + nOD + " decks of cards, think twice about printing them: ");
@@ -54,12 +58,13 @@ public class BlackjackApp {
 		if (playerName.equalsIgnoreCase("showcards")) {
 			dealer.dealersDeck.showAllCards();
 			welcomeScreen();
-		}else {
-		player.setName(playerName);
+		} else {
+			player.setName(playerName);
 		}
 	}
-	//call dealer methods to deal the first four cards in alternating order 
-	//place cards into respective hands
+
+	// call dealer methods to deal the first four cards in alternating order
+	// place cards into respective hands
 	public void initialDeal() {
 		System.out.println("Dealing...");
 		Card card1 = dealer.dealACard();
@@ -72,9 +77,10 @@ public class BlackjackApp {
 		dealer.dealerHand.addCard(card4);
 
 	}
-	//display player's first look at their cards and dealer's face up card,
+
+	// display player's first look at their cards and dealer's face up card,
 	public void displayInitial() {
-		//show's the player's current hand
+		// show's the player's current hand
 		displayPlayerHand();
 		System.out.println();
 		int playerHV = player.playerHand.getHandValue();
@@ -83,20 +89,22 @@ public class BlackjackApp {
 			playerBJ = true;
 		}
 		System.out.println("The dealer is showing:");
-		//Specifically show the second card dealt to the dealer, not the first
+		// Specifically show the second card dealt to the dealer, not the first
 		Card dealerFace = dealer.dealerHand.showSpecificCard(1);
 		System.out.println(dealerFace);
 		System.out.println();
 	}
-	//Show player's current hand and hand value
+
+	// Show player's current hand and hand value
 	private void displayPlayerHand() {
 		System.out.println();
 		System.out.println("You have:");
 		player.playerHand.showHand();
-		//int playerHV = player.playerHand.getHandValue();
+		// int playerHV = player.playerHand.getHandValue();
 		System.out.println("** Your current hand value is: " + player.playerHand.getHandValue() + " **");
 	}
-	//Allow player to hit or stand, display end game if reached
+
+	// Allow player to hit or stand, display end game if reached
 	public int playerTurn() {
 		while (true) {
 			System.out.print("Would you like to hit or stand?");
@@ -105,7 +113,7 @@ public class BlackjackApp {
 				Card cardX = dealer.dealACard();
 				player.playerHand.addCard(cardX);
 				int phv = player.playerHand.getHandValue();
-				if (player.playerHand.getHandValue() > 21) {	
+				if (player.playerHand.getHandValue() > 21) {
 					displayPlayerHand();
 					System.out.println("You busted with " + phv + ".  You lose.");
 					againChoice();
@@ -119,7 +127,8 @@ public class BlackjackApp {
 		}
 		return player.playerHand.getHandValue();
 	}
-	//rule based dealer hit and stand then print end game results
+
+	// rule based dealer hit and stand then print end game results
 	public void dealerTurn(int playerHV) {
 		System.out.println("Dealer reveals the hole card and now shows:");
 		dealer.dealerHand.showHand();
@@ -133,10 +142,10 @@ public class BlackjackApp {
 			}
 		} else if (dealerHV == playerHV && dealerHV > 16) {
 			System.out.println("It's a push.");
-		} else if (dealerHV > playerHV  && dealerHV > 16) {
+		} else if (dealerHV > playerHV && dealerHV > 16) {
 			System.out.println("Dealer wins.");
 		} else if (dealerHV <= 16) {
-			while (dealerHV < 17 ) { 
+			while (dealerHV < 17) {
 				System.out.println("Dealer hits...");
 				Card cardY = dealer.dealACard();
 				dealer.dealerHand.addCard(cardY);
@@ -153,28 +162,39 @@ public class BlackjackApp {
 				System.out.println("It's a push.");
 			} else if (dealerHV > playerHV) {
 				System.out.println("Dealer wins.");
-			} else { System.out.println("You win.");
+			} else {
+				System.out.println("You win.");
 			}
 		} else
 			System.out.println("You win.");
 	}
-	//Allow player to play another hand or quit
+
+	// Allow player to play another hand or quit
 	private void againChoice() {
 		boolean cont = true;
 		while (cont) {
-			int cardsRemaining = dealer.dealersDeck.checkDeckSize();
-			System.out.println("** There are " + cardsRemaining + " cards remaining **");
+			checkDeck();
 			System.out.println("Would you like to play again? Yes or No:");
 			String againChoice = kb.next();
 			if (againChoice.equalsIgnoreCase("yes") || againChoice.equalsIgnoreCase("y")) {
 				keepPlaying();
-			}
-			else if (againChoice.equalsIgnoreCase("NO") || againChoice.equalsIgnoreCase("n")) {
+			} else if (againChoice.equalsIgnoreCase("NO") || againChoice.equalsIgnoreCase("n")) {
 				System.out.println("Thanks for playing " + player.getName() + ", goodbye!");
 				System.exit(0);
 			} else {
 				System.out.println("invalid entry, try again");
 			}
+		}
+	}
+
+	public void checkDeck() {
+		int cardsRemaining = dealer.dealersDeck.checkDeckSize();
+		System.out.println("** There are " + cardsRemaining + " cards remaining **");
+		int mDS = dealer.dealersDeck.checkMinDeck();
+		if (cardsRemaining < mDS) {
+			dealer.dealerNewDeck();
+			
+			
 		}
 	}
 }

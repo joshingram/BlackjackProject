@@ -6,6 +6,9 @@ import com.skilldistillery.blackjack.entities.Card;
 import com.skilldistillery.blackjack.entities.Deck;
 
 public class DealingApp {
+	
+	//THIS A VALIDATION TESTING AP ONLY, NOT FOR USE WITH FINISHED APP
+	//PLEASE USE BlackjackApp.java FOR GRADING AND TESTING PURPOSES
 
 	public static void main(String[] args) {
 		DealingApp da = new DealingApp();
