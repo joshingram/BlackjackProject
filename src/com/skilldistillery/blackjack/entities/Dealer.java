@@ -1,5 +1,7 @@
 package com.skilldistillery.blackjack.entities;
 
+import java.util.List;
+
 public class Dealer extends Player{
 	public Deck dealersDeck = new Deck();
 	
@@ -16,7 +18,11 @@ public class Dealer extends Player{
 	public Card dealACard() {
 		Card card = dealersDeck.dealCard();
 		return card;
-		
+	}
+	
+	public int checkDealerDeck () {
+		int dealerDeckSize = dealersDeck.checkDeckSize();
+		return dealerDeckSize;
 	}
 
 }

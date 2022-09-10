@@ -1,6 +1,6 @@
 package com.skilldistillery.blackjack.entities;
 
-public class BlackjackHand extends Hand{
+public class BlackjackHand extends Hand {
 
 	@Override
 	public int getHandValue() {
@@ -14,15 +14,7 @@ public class BlackjackHand extends Hand{
 	@Override
 	public void addCard(Card card) {
 		cards.add(card);
-		
-	}
 
-	@Override
-	public void clear() {
-		//for (int i = 0 ; i < cards.size() ; i++) {
-			cards.removeAll(cards);
-		//}
-		
 	}
 
 	@Override
@@ -30,8 +22,9 @@ public class BlackjackHand extends Hand{
 		for (Card card : cards) {
 			System.out.println(card.toString());
 		}
-		
+
 	}
+
 	public Card showSpecificCard(int i) {
 		Card card = cards.get(i);
 		return card;

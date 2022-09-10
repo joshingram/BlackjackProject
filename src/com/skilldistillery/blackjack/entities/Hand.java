@@ -13,7 +13,9 @@ public abstract class Hand {
 	
 	public abstract void addCard(Card card);
 	
-	public abstract void clear();
+	public void clear() {
+		cards.removeAll(cards);
+	}
 	
 	public abstract void showHand();
 	
