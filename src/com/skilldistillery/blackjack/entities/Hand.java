@@ -11,11 +11,11 @@ public abstract class Hand {
 	public Hand () {
 	}
 	
-	public void addCard(Card card) {
-	}
+	public abstract void addCard(Card card);
 	
-	public void clear() {
-	}
+	public abstract void clear();
+	
+	public abstract void showHand();
 	
 	public abstract int getHandValue();
 
