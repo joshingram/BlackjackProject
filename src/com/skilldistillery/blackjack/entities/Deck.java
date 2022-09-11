@@ -11,7 +11,7 @@ public class Deck {
 	private final double MIN_DECK = 0.8;
 
 	public Deck() {
-		for (int i = 0; i < NUM_OF_DECKS; i++) {
+		for (int i = 0; i < NUM_OF_DECKS; i++) { 
 			for (Rank rank : Rank.values()) {
 				for (Suit suit : Suit.values()) {
 					deck.add(new Card(suit, rank));

@@ -10,7 +10,7 @@ public class BlackjackApp {
 	String playerName = ""; // TODO private?
 	Dealer dealer = new Dealer("Dealer");
 	ThePlayer player = new ThePlayer(playerName);
-	boolean playerBJ = false;
+	boolean playerBJ;
 
 	public static void main(String[] args) {
 		BlackjackApp bja = new BlackjackApp();
@@ -28,8 +28,8 @@ public class BlackjackApp {
 			clearHands();
 			initialDeal();
 			displayInitial();
-			int phv = playerTurn();
-			dealerTurn(phv);
+			int playerHandValue = playerTurn();
+			dealerTurn(playerHandValue);
 			againChoice();
 		}
 	}
@@ -43,16 +43,17 @@ public class BlackjackApp {
 	public void welcomeScreen() {
 		System.out.println("Welcome to the Black Jack App");
 		System.out.println();
-		int nOD = dealer.dealersDeck.checkNumOfDecks();
+		int numDecks = dealer.dealersDeck.checkNumOfDecks();
 		int minShoe = dealer.dealersDeck.checkMinDeck();
 		System.out.println("** House Rules **");
-		System.out.println("-We're playing with an " + nOD + " deck shoe. ");
+		System.out.println("-We're playing with an " + numDecks + " deck shoe. ");
 		System.out.println("-A new shoe will be used when " + minShoe + " cards remain in the shoe"); 
-		System.out.println("-The dealer must hit on 16 (and below) and stand on 17 (and above).");
+		System.out.println("-The dealer must hit on 16 (and below) and on soft 17");
+		System.out.println("-The dealer must and stand on hard 17 (and above).");
 		System.out.println("-Administrative notes are shown with \"** notation **\"");
 		System.out.println();
 		System.out.println("Please enter your NAME or enter \"showcards\" to print the entire deck");
-		System.out.println("There are " + nOD + " decks of cards, think twice about printing them: ");
+		System.out.println("There are " + numDecks + " decks of cards, think twice about printing them: ");
 		playerName = kb.next();
 		kb.nextLine();
 		if (playerName.equalsIgnoreCase("showcards")) {
@@ -84,8 +85,9 @@ public class BlackjackApp {
 		displayPlayerHand();
 		System.out.println();
 		int playerHV = player.playerHand.getHandValue();
+		playerBJ = false;
 		if (playerHV == 21) {
-			System.out.println("You have Black Jack!! You'd better stand and and see what the dealer has.");
+			System.out.println("You have a natural Black Jack!!");
 			playerBJ = true;
 		}
 		System.out.println("The dealer is showing:");
@@ -100,8 +102,11 @@ public class BlackjackApp {
 		System.out.println();
 		System.out.println("You have:");
 		player.playerHand.showHand();
-		// int playerHV = player.playerHand.getHandValue();
 		System.out.println("** Your current hand value is: " + player.playerHand.getHandValue() + " **");
+		int playerHV = player.playerHand.getHandValue();
+		if (playerHV == 21) {
+			System.out.println("You have 21, you'd be a fool to hit again");
+		}
 	}
 
 	// Allow player to hit or stand, display end game if reached
@@ -133,6 +138,7 @@ public class BlackjackApp {
 		System.out.println("Dealer reveals the hole card and now shows:");
 		dealer.dealerHand.showHand();
 		int dealerHV = dealer.dealerHand.getHandValue();
+		boolean isSoft = dealer.dealerHand.getIsSoft();
 		System.out.println("** Dealer's hand value is " + dealerHV + " **");
 		if (dealerHV == 21) {
 			if (dealerHV == 21 && playerBJ) {
@@ -140,12 +146,12 @@ public class BlackjackApp {
 			} else {
 				System.out.println("Dealer has Black Jack!! You lose.");
 			}
-		} else if (dealerHV == playerHV && dealerHV > 16) {
+		} else if ((dealerHV == playerHV) && (dealerHV > 16) && (!isSoft)) {
 			System.out.println("It's a push.");
-		} else if (dealerHV > playerHV && dealerHV > 16) {
+		} else if ((dealerHV > playerHV) && (dealerHV > 16) && (!isSoft)) {
 			System.out.println("Dealer wins.");
-		} else if (dealerHV <= 16) {
-			while (dealerHV < 17) {
+		} else if ((dealerHV <= 16) || ((dealerHV == 17) && (isSoft))) {
+			while ((dealerHV < 17) || ((dealerHV == 17) && (isSoft))) {
 				System.out.println("Dealer hits...");
 				Card cardY = dealer.dealACard();
 				dealer.dealerHand.addCard(cardY);
