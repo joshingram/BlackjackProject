@@ -7,39 +7,47 @@ import com.skilldistillery.blackjack.entities.ThePlayer;
 
 public class BlackjackApp {
 	Scanner kb = new Scanner(System.in);
-	String playerName = ""; // TODO private?
+	String playerName = ""; 
 	Dealer dealer = new Dealer("Dealer");
 	ThePlayer player = new ThePlayer(playerName);
 	boolean playerBJ;
 
 	public static void main(String[] args) {
+		//instantiate the Class and call the first (non main) method
 		BlackjackApp bja = new BlackjackApp();
 		bja.letsPlay();
 	}
-
+	//Invoke the welcome screen, then shuffle, and continue the game with keepPlaying
 	public void letsPlay() {
 		welcomeScreen();
 		dealer.dealerShuffle();
 		keepPlaying();
 	}
-
+	//Continue the game from letsPlay OR from againChoice - skip welcome, deck is already shuffled
 	public void keepPlaying() {
+		//while loop to repeat play
 		while (true) {
+			//clear the previous hand if coming from againChoice
 			clearHands();
+			//deal first 4 cards
 			initialDeal();
+			//show the initial table
 			displayInitial();
+			//allow the player to play return hand value to pass to dealer's turn
 			int playerHandValue = playerTurn();
+			//dealer's turn, takes player's hand value
 			dealerTurn(playerHandValue);
+			//allow player to choose to play again or quit
 			againChoice();
 		}
 	}
-
+	//clear both dealer and player hands
 	private void clearHands() {
 		player.playerHand.clear();
 		dealer.dealerHand.clear();
 	}
 
-	// Print the welcome screen, the ground rules and asks for player's name
+	// Print the welcome screen, the ground rules and asks for player's name, allow for printing the deck
 	public void welcomeScreen() {
 		System.out.println("Welcome to the Black Jack App");
 		System.out.println();
@@ -66,14 +74,19 @@ public class BlackjackApp {
 
 	// call dealer methods to deal the first four cards in alternating order
 	// place cards into respective hands
+	// might be able to reduce the lines used/DRY, but this makes the dealing
+	// order very clear
 	public void initialDeal() {
 		System.out.println("Dealing...");
 		Card card1 = dealer.dealACard();
 		player.playerHand.addCard(card1);
+		
 		Card card2 = dealer.dealACard();
 		dealer.dealerHand.addCard(card2);
+		
 		Card card3 = dealer.dealACard();
 		player.playerHand.addCard(card3);
+		
 		Card card4 = dealer.dealACard();
 		dealer.dealerHand.addCard(card4);
 
@@ -86,6 +99,7 @@ public class BlackjackApp {
 		System.out.println();
 		int playerHV = player.playerHand.getHandValue();
 		playerBJ = false;
+		//immediately ID a natural blackjack and set boolean
 		if (playerHV == 21) {
 			System.out.println("You have a natural Black Jack!!");
 			playerBJ = true;
@@ -97,13 +111,14 @@ public class BlackjackApp {
 		System.out.println();
 	}
 
-	// Show player's current hand and hand value
+	// Show player's current hand and hand value, called frequently, keeps other methods DRY
 	private void displayPlayerHand() {
 		System.out.println();
 		System.out.println("You have:");
 		player.playerHand.showHand();
 		System.out.println("** Your current hand value is: " + player.playerHand.getHandValue() + " **");
 		int playerHV = player.playerHand.getHandValue();
+		//some basic advice
 		if (playerHV == 21) {
 			System.out.println("You have 21, you'd be a fool to hit again");
 		}
@@ -112,15 +127,15 @@ public class BlackjackApp {
 	// Allow player to hit or stand, display end game if reached
 	public int playerTurn() {
 		while (true) {
-			System.out.print("Would you like to hit or stand?");
-			String playerChoice = kb.next(); // TODO try/catch for inputexception?
+			System.out.print("Would you like to hit/h or stand/s?");
+			String playerChoice = kb.next();
 			if (playerChoice.equalsIgnoreCase("hit") || playerChoice.equalsIgnoreCase("h")) {
 				Card cardX = dealer.dealACard();
 				player.playerHand.addCard(cardX);
 				int phv = player.playerHand.getHandValue();
 				if (player.playerHand.getHandValue() > 21) {
 					displayPlayerHand();
-					System.out.println("You busted with " + phv + ".  You lose.");
+					System.out.println("You busted with " + phv + ".  Dealer wins.");
 					againChoice();
 				}
 				displayPlayerHand();
@@ -140,12 +155,14 @@ public class BlackjackApp {
 		int dealerHV = dealer.dealerHand.getHandValue();
 		boolean isSoft = dealer.dealerHand.getIsSoft();
 		System.out.println("** Dealer's hand value is " + dealerHV + " **");
+		//if the dealer has a natural blackjack - does the player also have BJ?
 		if (dealerHV == 21) {
 			if (dealerHV == 21 && playerBJ) {
 				System.out.println("Dealer has also Black Jack!! It's a push.");
 			} else {
-				System.out.println("Dealer has Black Jack!! You lose.");
+				System.out.println("Dealer has Black Jack!! Dealer wins.");
 			}
+		//dealer does not have BJ, compare value to player, implement dealer rules and soft hits	
 		} else if ((dealerHV == playerHV) && (dealerHV > 16) && (!isSoft)) {
 			System.out.println("It's a push.");
 		} else if ((dealerHV > playerHV) && (dealerHV > 16) && (!isSoft)) {
@@ -180,7 +197,7 @@ public class BlackjackApp {
 		boolean cont = true;
 		while (cont) {
 			checkDeck();
-			System.out.println("Would you like to play again? Yes or No:");
+			System.out.println("Would you like to play again? Yes/Y or No/N:");
 			String againChoice = kb.next();
 			if (againChoice.equalsIgnoreCase("yes") || againChoice.equalsIgnoreCase("y")) {
 				keepPlaying();
@@ -192,15 +209,13 @@ public class BlackjackApp {
 			}
 		}
 	}
-
+	//show the number of cards remaining and invoke dealer to make a new shoe when cards remaining are < min deck size
 	public void checkDeck() {
 		int cardsRemaining = dealer.dealersDeck.checkDeckSize();
 		System.out.println("** There are " + cardsRemaining + " cards remaining **");
 		int mDS = dealer.dealersDeck.checkMinDeck();
 		if (cardsRemaining < mDS) {
 			dealer.dealerNewDeck();
-			
-			
 		}
 	}
 }
