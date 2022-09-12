@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Deck {
-	List<Card> deck = new ArrayList<>();
+	private List<Card> deck = new ArrayList<>();
 	private final int NUM_OF_DECKS = 8;
 	private final int CARDS_PER_DECK = 52;
 	private final double MIN_DECK = 0.8;
