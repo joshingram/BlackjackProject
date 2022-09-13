@@ -11,8 +11,8 @@ public abstract class Hand {
 	public Hand () {
 	}
 	//add a card to the hand
-	public  void addCard(Card card) {
-	cards.add(card);
+	public void addCard(Card card) {
+		cards.add(card);
 	}
 	//remove all cards from the hand
 	public void clear() {

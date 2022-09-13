@@ -23,32 +23,30 @@ public class Deck {
 		}
 	}
 	//check how many cards are in the deck (shoe)
-	public int checkDeckSize() {
+	public int checkDeckSize() {  
 		int deckSize = deck.size();
 		return deckSize;
 	}
 	//how many decks are in a shoe
-	public int checkNumOfDecks() {
+	public int checkNumOfDecks() {  
 		return NUM_OF_DECKS;
 	}
 	//uses "house rules" from final values to determine the min number of cards before a new shoe is implemented
-	public int checkMinDeck() {
+	public int checkMinDeck() {  
 		int minCards = (int) (NUM_OF_DECKS * CARDS_PER_DECK * MIN_DECK);
 		return minCards;
 	}
 	//deal a card by removing it from the deck (shoe)
-	public Card dealCard() {
+	public Card dealCard() {   
 		Card removed = deck.remove(0);
 		return removed;
 	}
 	//shuffle the deck (shoe)
-	public void shuffle() {
+	public void shuffle() {  
 		Collections.shuffle(deck);
 	}
-	//show all cards in the deck (shoe)
-	public void showAllCards() {
-		for (Card card : deck) {
-			System.out.println(card.toString());
-		}
+
+	public List<Card> getDeck() {  
+		return deck;
 	}
 }
